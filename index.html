@@ -3,42 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <title>Heart Disease Risk Checker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
       background: url('heart-bg.png') no-repeat center center fixed;
       background-size: cover;
-      backdrop-filter: blur(3px) brightness(0.9);
     }
 
-    .container {
+    form {
       max-width: 600px;
-      margin: 40px auto;
-      background-color: rgba(255, 255, 255, 0.9);
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    }
-
-    h2 {
-      text-align: center;
-      color: #333;
+      margin: auto;
+      background-color: rgba(255, 255, 255, 0.92);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     }
 
     input, select, button {
-      margin: 10px 0;
       width: 100%;
-      padding: 10px;
-      font-size: 14px;
-      border-radius: 4px;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 5px;
       border: 1px solid #ccc;
+      box-sizing: border-box;
+      font-size: 1rem;
     }
 
     button {
       background-color: #4CAF50;
       color: white;
       border: none;
+      font-weight: bold;
       cursor: pointer;
     }
 
@@ -46,91 +44,114 @@
       background-color: #45a049;
     }
 
-    pre {
-      background: white;
-      padding: 15px;
-      white-space: pre-wrap;
-      border-radius: 5px;
-      margin-top: 20px;
-    }
-
     label {
       font-weight: bold;
       display: block;
       margin-top: 10px;
     }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    h3 {
+      color: #222;
+      margin-top: 30px;
+    }
+
+    pre {
+      background: white;
+      padding: 15px;
+      white-space: pre-wrap;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+
+      form {
+        padding: 15px;
+      }
+
+      input, select, button {
+        font-size: 0.95rem;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>🫀 Heart Disease Risk Assessment</h2>
+  <h2>🧠 Heart Disease Risk Assessment</h2>
 
-    <form id="reportForm">
-      <label>Age</label>
-      <input name="age" type="number" required />
+  <form id="reportForm">
+    <label>Age</label>
+    <input name="age" type="number" required />
 
-      <label>Sex</label>
-      <select name="sex">
-        <option value="M">Male</option>
-        <option value="F">Female</option>
-      </select>
+    <label>Sex</label>
+    <select name="sex">
+      <option value="M">Male</option>
+      <option value="F">Female</option>
+    </select>
 
-      <label>Chest Pain Type</label>
-      <select name="ChestPainType">
-        <option value="ATA">Atypical Angina</option>
-        <option value="NAP">Non-anginal Pain</option>
-        <option value="ASY">Asymptomatic</option>
-        <option value="TA">Typical Angina</option>
-      </select>
+    <label>Chest Pain Type</label>
+    <select name="ChestPainType">
+      <option value="ATA">Atypical Angina</option>
+      <option value="NAP">Non-anginal Pain</option>
+      <option value="ASY">Asymptomatic</option>
+      <option value="TA">Typical Angina</option>
+    </select>
 
-      <label>RestingBP</label>
-      <input name="RestingBP" type="number" required />
+    <label>RestingBP</label>
+    <input name="RestingBP" type="number" required />
 
-      <label>Cholesterol</label>
-      <input name="Cholesterol" type="number" required />
+    <label>Cholesterol</label>
+    <input name="Cholesterol" type="number" required />
 
-      <label>FastingBS (1 = Yes, 0 = No)</label>
-      <select name="FastingBS">
-        <option value="1">Yes</option>
-        <option value="0">No</option>
-      </select>
+    <label>FastingBS (1 = Yes, 0 = No)</label>
+    <select name="FastingBS">
+      <option value="1">Yes</option>
+      <option value="0">No</option>
+    </select>
 
-      <label>RestingECG</label>
-      <select name="RestingECG">
-        <option value="Normal">Normal</option>
-        <option value="ST">ST</option>
-        <option value="LVH">LVH</option>
-      </select>
+    <label>RestingECG</label>
+    <select name="RestingECG">
+      <option value="Normal">Normal</option>
+      <option value="ST">ST</option>
+      <option value="LVH">LVH</option>
+    </select>
 
-      <label>MaxHR</label>
-      <input name="MaxHR" type="number" required />
+    <label>MaxHR</label>
+    <input name="MaxHR" type="number" required />
 
-      <label>Exercise Angina</label>
-      <select name="ExerciseAngina">
-        <option value="Y">Yes</option>
-        <option value="N">No</option>
-      </select>
+    <label>Exercise Angina</label>
+    <select name="ExerciseAngina">
+      <option value="Y">Yes</option>
+      <option value="N">No</option>
+    </select>
 
-      <label>Oldpeak</label>
-      <input name="Oldpeak" type="number" step="0.1" required />
+    <label>Oldpeak</label>
+    <input name="Oldpeak" type="number" step="0.1" required />
 
-      <label>ST Slope</label>
-      <select name="ST_Slope">
-        <option value="Up">Up</option>
-        <option value="Flat">Flat</option>
-        <option value="Down">Down</option>
-      </select>
+    <label>ST Slope</label>
+    <select name="ST_Slope">
+      <option value="Up">Up</option>
+      <option value="Flat">Flat</option>
+      <option value="Down">Down</option>
+    </select>
 
-      <label>Upload Health Report (.csv, .pdf, .jpg)</label>
-      <input type="file" id="uploadReport" accept=".csv,.pdf,.jpg,.jpeg,.png" />
-      <button type="button" id="uploadButton">Upload & Auto-Fill</button>
+    <label>Upload Health Report (.csv, .pdf, .jpg)</label>
+    <input type="file" id="uploadReport" accept=".csv,.pdf,.jpg,.jpeg,.png" />
+    <button type="button" id="uploadButton">Upload & Auto-Fill</button>
 
-      <button type="submit">Generate Report</button>
-    </form>
+    <button type="submit">Generate Report</button>
+  </form>
 
-    <h3>📄 AI Report:</h3>
-    <pre id="reportOutput"></pre>
-  </div>
+  <h3>📄 AI Report:</h3>
+  <pre id="reportOutput"></pre>
 
   <script>
     document.getElementById("reportForm").onsubmit = async function (e) {
@@ -158,6 +179,7 @@
     async function uploadReport() {
       const fileInput = document.getElementById("uploadReport");
       const file = fileInput.files[0];
+
       if (!file) {
         alert("Please upload a report file.");
         return;
@@ -172,7 +194,6 @@
       });
 
       const result = await res.json();
-
       if (result.patient_data) {
         for (const [key, value] of Object.entries(result.patient_data)) {
           const input = document.querySelector(`[name="${key}"]`);

@@ -63,16 +63,15 @@
       margin-right: auto;
     }
 
-   h3 {
-  color: white;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
-  background-color: rgba(0, 0, 0, 0.35);
-  padding: 8px 15px;
-  border-radius: 6px;
-  display: inline-block;
-  margin-top: 30px;
-}
-
+    h3 {
+      color: white;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+      background-color: rgba(0, 0, 0, 0.35);
+      padding: 8px 15px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-top: 30px;
+    }
 
     pre {
       background: white;
@@ -167,11 +166,14 @@
   <pre id="reportOutput"></pre>
 
   <script>
+    const BASE_URL = "https://heart-disease-ai-backend.onrender.com";
+
     document.getElementById("reportForm").onsubmit = async function (e) {
       e.preventDefault();
       const formData = new FormData(e.target);
       const data = Object.fromEntries(formData.entries());
 
+      // Convert numeric fields
       data.age = parseInt(data.age);
       data.RestingBP = parseInt(data.RestingBP);
       data.Cholesterol = parseInt(data.Cholesterol);
@@ -179,14 +181,20 @@
       data.MaxHR = parseInt(data.MaxHR);
       data.Oldpeak = parseFloat(data.Oldpeak);
 
-      const res = await fetch("https://heart-disease-ai-backend.onrender.com/generate-report", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
+      try {
+        const res = await fetch(`${BASE_URL}/generate-report`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
 
-      const result = await res.json();
-      document.getElementById("reportOutput").innerText = result.report;
+        if (!res.ok) throw new Error("Failed to fetch report");
+
+        const result = await res.json();
+        document.getElementById("reportOutput").innerText = result.report;
+      } catch (err) {
+        document.getElementById("reportOutput").innerText = "❌ Error: " + err.message;
+      }
     };
 
     async function uploadReport() {
@@ -201,20 +209,26 @@
       const formData = new FormData();
       formData.append("file", file);
 
-      const res = await fetch("https://heart-disease-ai-backend.onrender.com/upload-report", {
-        method: "POST",
-        body: formData,
-      });
+      try {
+        const res = await fetch(`${BASE_URL}/upload-report`, {
+          method: "POST",
+          body: formData,
+        });
 
-      const result = await res.json();
-      if (result.patient_data) {
-        for (const [key, value] of Object.entries(result.patient_data)) {
-          const input = document.querySelector(`[name="${key}"]`);
-          if (input) input.value = value;
+        if (!res.ok) throw new Error("Upload failed");
+
+        const result = await res.json();
+        if (result.patient_data) {
+          for (const [key, value] of Object.entries(result.patient_data)) {
+            const input = document.querySelector(`[name="${key}"]`);
+            if (input) input.value = value;
+          }
+          alert("Form auto-filled with extracted data!");
+        } else {
+          alert("❌ Failed to extract data from report.");
         }
-        alert("Form auto-filled with extracted data!");
-      } else {
-        alert("Failed to extract data from report.");
+      } catch (err) {
+        alert("❌ Upload error: " + err.message);
       }
     }
 

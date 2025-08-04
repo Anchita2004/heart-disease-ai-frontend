@@ -166,7 +166,7 @@
   <pre id="reportOutput"></pre>
 
   <script>
-    const BASE_URL = "https://heart-disease-ai-backend.onrender.com/";
+    const BASE_URL = "https://heart-disease-ai-backend.onrender.com";
 
     document.getElementById("reportForm").onsubmit = async function (e) {
       e.preventDefault();
@@ -181,7 +181,13 @@
       data.MaxHR = parseInt(data.MaxHR);
       data.Oldpeak = parseFloat(data.Oldpeak);
 
+      if (Object.values(data).some(v => v === "" || v === null || isNaN(data.age))) {
+        document.getElementById("reportOutput").innerText = "❌ Please fill in all fields correctly.";
+        return;
+      }
+
       try {
+        document.getElementById("reportOutput").innerText = "⏳ Generating report...";
         const res = await fetch(`${BASE_URL}/generate-report`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -223,7 +229,7 @@
             const input = document.querySelector(`[name="${key}"]`);
             if (input) input.value = value;
           }
-          alert("Form auto-filled with extracted data!");
+          alert("✅ Form auto-filled with extracted data!");
         } else {
           alert("❌ Failed to extract data from report.");
         }

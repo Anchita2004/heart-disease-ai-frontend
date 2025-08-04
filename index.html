@@ -109,7 +109,7 @@
       <option value="F">Female</option>
     </select>
 
-    <label>Chest Pain Type</label>
+    <label>ChestPainType</label>
     <select name="ChestPainType">
       <option value="ATA">Atypical Angina</option>
       <option value="NAP">Non-anginal Pain</option>
@@ -139,7 +139,7 @@
     <label>MaxHR</label>
     <input name="MaxHR" type="number" required />
 
-    <label>Exercise Angina</label>
+    <label>ExerciseAngina</label>
     <select name="ExerciseAngina">
       <option value="Y">Yes</option>
       <option value="N">No</option>
@@ -148,7 +148,7 @@
     <label>Oldpeak</label>
     <input name="Oldpeak" type="number" step="0.1" required />
 
-    <label>ST Slope</label>
+    <label>ST_Slope</label>
     <select name="ST_Slope">
       <option value="Up">Up</option>
       <option value="Flat">Flat</option>
@@ -224,14 +224,26 @@
         if (!res.ok) throw new Error("Upload failed");
 
         const result = await res.json();
-        if (result.patient_data) {
+
+        if (result && result.patient_data && Object.keys(result.patient_data).length > 0) {
+          let filled = 0;
           for (const [key, value] of Object.entries(result.patient_data)) {
             const input = document.querySelector(`[name="${key}"]`);
-            if (input) input.value = value;
+            if (input) {
+              input.value = value;
+              filled++;
+            } else {
+              console.warn(`⚠️ Field "${key}" not found in form.`);
+            }
           }
-          alert("✅ Form auto-filled with extracted data!");
+
+          if (filled > 0) {
+            alert("✅ Form auto-filled with extracted data!");
+          } else {
+            alert("⚠️ Data extracted, but form inputs didn’t match field names.");
+          }
         } else {
-          alert("❌ Failed to extract data from report.");
+          alert("❌ No patient data extracted from report.");
         }
       } catch (err) {
         alert("❌ Upload error: " + err.message);
